@@ -1,0 +1,43 @@
+<html data-surface-id="openmontage" data-surface-modal-path="/plugins/openmontage/webui/main.html" data-surface-dock-title="Dock OpenMontage" data-surface-dock-icon="dock_to_right">
+<head>
+  <title>OpenMontage</title>
+  <script type="module" src="/plugins/openmontage/webui/production-store.js"></script>
+  <link rel="stylesheet" href="/plugins/openmontage/webui/production.css">
+</head>
+<body>
+<div x-data>
+<template x-if="$store.openMontage">
+<section class="om-studio" x-init="$store.openMontage.refresh()" x-destroy="$store.openMontage.cleanup()" :aria-busy="$store.openMontage.busy">
+  <header class="om-head"><div class="om-brand"><x-icon name="movie" aria-hidden="true"></x-icon><strong>OpenMontage</strong></div><button class="om-icon" @click="$store.openMontage.refresh()" :disabled="$store.openMontage.busy" aria-label="Refresh productions"><x-icon name="refresh"></x-icon></button></header>
+  <nav class="om-tabs" aria-label="Production views">
+    <button @click="$store.openMontage.tab = 'new'" :aria-pressed="$store.openMontage.tab === 'new'"><x-icon name="add"></x-icon>New video</button>
+    <button @click="$store.openMontage.tab = 'library'" :aria-pressed="$store.openMontage.tab === 'library'"><x-icon name="video_library"></x-icon>My videos<span class="om-count" x-text="$store.openMontage.projects.length"></span></button>
+    <button x-show="$store.openMontage.current" @click="$store.openMontage.tab = 'production'" :aria-pressed="$store.openMontage.tab === 'production'"><x-icon name="movie_edit"></x-icon>Production</button>
+  </nav>
+  <div class="om-body" x-show="$store.openMontage.tab === 'new'">
+    <form @submit.prevent="$store.openMontage.create()" class="om-form">
+      <div class="om-brief"><label class="om-field">Title<input x-model="$store.openMontage.title" maxlength="100" required autocomplete="off"></label><label class="om-field">Brief<textarea x-model="$store.openMontage.brief" rows="5" maxlength="12000" required></textarea></label><label class="om-field om-budget">Target budget (USD)<input x-model.number="$store.openMontage.budget" type="number" min="0" max="1000" step="0.01" required></label></div>
+      <fieldset class="om-pipelines"><legend>Video type</legend><div class="om-pipeline-list">
+        <template x-for="item in $store.openMontage.pipelines" :key="item.id"><button type="button" class="om-pipeline" :aria-pressed="$store.openMontage.pipeline === item.id" @click="$store.openMontage.pipeline = item.id"><span class="om-pipeline-title"><strong x-text="item.name"></strong><x-icon x-show="$store.openMontage.pipeline === item.id" name="check" aria-label="Selected"></x-icon></span></button></template>
+      </div></fieldset>
+      <footer class="om-actions"><span role="status" x-show="!$store.openMontage.ready || !$store.openMontage.ffmpeg" x-text="$store.openMontage.busy ? 'Loading…' : (!$store.openMontage.ready ? 'Runtime unavailable' : 'FFmpeg unavailable')"></span><button type="submit" class="om-primary" :disabled="!$store.openMontage.canCreate"><x-icon name="movie" aria-hidden="true"></x-icon>Create video</button></footer>
+    </form>
+  </div>
+  <div class="om-body" x-show="$store.openMontage.tab === 'library'">
+    <div class="om-empty" x-show="!$store.openMontage.projects.length"><x-icon name="movie" aria-hidden="true"></x-icon><button class="om-primary" @click="$store.openMontage.tab = 'new'">New video</button></div>
+    <div class="om-projects"><template x-for="project in $store.openMontage.projects" :key="project.id"><button class="om-project" @click="$store.openMontage.view(project)"><div class="om-film"><x-icon :name="project.renders.length ? 'play_circle' : 'movie'" aria-hidden="true"></x-icon></div><strong x-text="project.title"></strong><span x-text="project.pipeline_type.replaceAll('-', ' ')"></span><span class="om-state" x-text="project.status"></span></button></template></div>
+  </div>
+  <template x-if="$store.openMontage.tab === 'production' && $store.openMontage.current">
+    <div class="om-production">
+      <div class="om-production-head"><strong x-text="$store.openMontage.current.title"></strong><span x-show="$store.openMontage.current.spent !== null" x-text="'$' + Number($store.openMontage.current.spent).toFixed(2)"></span></div>
+      <ol class="om-stages"><template x-for="stage in $store.openMontage.current.stages" :key="stage.id"><li :data-status="stage.status"><x-icon :name="$store.openMontage.stageIcon(stage.status)" aria-hidden="true"></x-icon><strong x-text="stage.name"></strong><span x-text="stage.label"></span></li></template></ol>
+      <template x-if="$store.openMontage.selectedRender"><div class="om-player"><video controls preload="metadata" :src="$store.openMontage.url()" aria-label="Rendered video"></video><div class="om-render-bar"><label class="om-field">Render<select x-model="$store.openMontage.selectedRender"><template x-for="render in $store.openMontage.current.renders" :key="render.name"><option :value="render.name" x-text="render.name"></option></template></select></label><a class="om-icon" :href="$store.openMontage.url(true)" aria-label="Download video"><x-icon name="download"></x-icon></a></div></div></template>
+      <div class="om-empty" x-show="!$store.openMontage.selectedRender"><x-icon name="movie" aria-hidden="true"></x-icon></div>
+      <footer class="om-actions"><button @click="$store.openMontage.refresh()" :disabled="$store.openMontage.busy"><x-icon name="refresh"></x-icon>Refresh</button><button class="om-primary" @click="$store.openMontage.start()" :disabled="$store.openMontage.busy"><x-icon name="chat_bubble"></x-icon>Continue in chat</button></footer>
+    </div>
+  </template>
+</section>
+</template>
+</div>
+</body>
+</html>

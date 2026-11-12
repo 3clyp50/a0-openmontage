@@ -1,0 +1,9 @@
+<div x-data>
+<div class="right-canvas-surface-panel" data-surface-id="openmontage"
+     :class="{'is-active': $store.rightCanvas?.isSurfaceVisible('openmontage'), 'is-mounted': $store.rightCanvas?.isSurfaceRendered('openmontage')}"
+     :aria-hidden="(!$store.rightCanvas?.isSurfaceVisible('openmontage')).toString()" style="overflow:auto">
+  <template x-if="$store.rightCanvas?.isSurfaceRendered('openmontage')">
+    <x-component path="/plugins/openmontage/webui/main.html" mode="canvas"></x-component>
+  </template>
+</div>
+</div>
