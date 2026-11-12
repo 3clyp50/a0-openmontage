@@ -18,6 +18,7 @@
 .om-brief { display:grid; gap:18px; align-content:start; }
 .om-field { display:grid; gap:8px; font-size:13px; font-weight:500; }
 .om-studio input,.om-studio textarea,.om-studio select { min-width:0; width:100%; background:var(--color-panel); border:1px solid var(--color-border); border-radius:6px; padding:11px 12px; font-weight:400; }
+.om-studio input:focus,.om-studio textarea:focus,.om-studio select:focus { outline:none; border-color:var(--color-primary); background:var(--color-input-focus); }
 .om-studio textarea { resize:vertical; min-height:140px; }
 .om-budget { max-width:190px; }
 .om-pipelines { min-width:0; border:0; padding:0; margin:0; }

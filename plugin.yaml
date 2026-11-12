@@ -1,7 +1,7 @@
 name: openmontage
 title: OpenMontage
 description: Produce videos with OpenMontage pipelines, native project and checkpoint views, and playable renders inside Agent Zero.
-version: 1.0.0
+version: 1.0.1
 settings_sections: []
 per_project_config: false
 per_agent_config: false

@@ -2,7 +2,7 @@
 
 Video production with OpenMontage's pipeline system inside Agent Zero.
 
-Open **OpenMontage** from the sidebar or canvas. Choose a video type, enter a title, brief and media budget, then select **Create video**. A new Agent Zero chat runs the production workflow. Creative approvals happen in chat. **Refresh** reads real checkpoints and rendered videos into the panel.
+Open **OpenMontage** from the right canvas rail. Choose a video type, enter a title, brief and media budget, then select **Create video**. A new Agent Zero chat runs the production workflow. Creative approvals happen in chat. **Refresh** reads real checkpoints and rendered videos into the panel.
 
 ![OpenMontage production desk](docs/studio.png)
 
